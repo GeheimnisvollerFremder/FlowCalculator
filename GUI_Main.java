@@ -53,7 +53,7 @@ public class GUI_Main {
 	static JRadioButton rdbtnNitrogen;
 	static JLabel lblDtc;
 	
-	private static double length, innerDiameter, df, temperature, p_In, p_Out, dT, aGradient;
+	private static double length, innerDiameter, df, temperature, p_In, p_Out, dT, aGradient, kappa;
 	private static JTextField textResultFlow;
 	private static int gasType = 1;
 	boolean isGradient = false;
@@ -61,6 +61,7 @@ public class GUI_Main {
 	double Test;
 	static JTextField textField_6;
 	static JTextField textField_7;
+	private JTextField textField_8;
 	
 	//Objekte
 	
@@ -111,14 +112,17 @@ public class GUI_Main {
 
 
 	private void setValuesInGUI(double flow) {		
-		textResultFlow.setText(Double.toString(flow));				
+		textResultFlow.setText(Double.toString(flow));
+		textField_8.setText(Double.toString(kappa));
 	}
 	
 	private void calculate(){
 		getValuesFromGUI();
 		 Capillary cap1 = new Capillary(length, innerDiameter, df, temperature, gasType, isGradient, dT, aGradient);
 		 Flow flow_cap1 = new Flow(p_In, p_Out, cap1.getKappa());
+		 kappa = cap1.getKappa();
 		setValuesInGUI(flow_cap1.getFlow()); 
+		
 	}
 	
 
@@ -235,7 +239,7 @@ public class GUI_Main {
 		textField_5.setBounds(580, 327, 86, 20);
 		frmGradientFlowCalculator.getContentPane().add(textField_5);
 		
-		JLabel lblPoutkpaabs = new JLabel("p_out [kPa (abs)]");
+		JLabel lblPoutkpaabs = new JLabel("p_out [Pa (abs)]");
 		lblPoutkpaabs.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblPoutkpaabs.setBounds(407, 327, 163, 20);
 		frmGradientFlowCalculator.getContentPane().add(lblPoutkpaabs);
@@ -384,6 +388,17 @@ public class GUI_Main {
 		textField_7.setColumns(10);
 		textField_7.setBounds(394, 294, 86, 20);
 		frmGradientFlowCalculator.getContentPane().add(textField_7);
+		
+		JLabel lblKappaSumme = new JLabel("Kappa Summe");
+		lblKappaSumme.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblKappaSumme.setBounds(109, 423, 163, 20);
+		frmGradientFlowCalculator.getContentPane().add(lblKappaSumme);
+		
+		textField_8 = new JTextField();
+		textField_8.setText("250.0");
+		textField_8.setColumns(10);
+		textField_8.setBounds(251, 426, 213, 20);
+		frmGradientFlowCalculator.getContentPane().add(textField_8);
 		
 		
 	}

@@ -43,7 +43,7 @@ public class Capillary {
 	// Faktor Kappa ehemals Faktor K berechnen
 	private double calcKappa() {			
 		double position;
-		double tempAtPosition;
+		double tempAtPosition = temperature + dTemp;
 		double EtaAtPosition;
 		double kappaAtPosition;
 		int i;
@@ -51,7 +51,7 @@ public class Capillary {
 		
 		if(isGradientEnabled==false){
 				calcEta(temperature);
-				kappa = (eta * length * (temperature + 273.15) / Math.pow((innerDiameter - df / 1000) / 1000, 4));
+				kappa = (eta * length * (temperature + 273.15) / Math.pow((innerDiameter - 2 *df / 1000) / 1000, 4));
 			} else { 
 				if(isGradientEnabled==true){
 				for (i=0; i<1001; i++){
@@ -59,20 +59,24 @@ public class Capillary {
 					// step 1: Calculate positon z 
 					position = i * length/1000;
 					
+					if (position > 0){
+						
 					
 					// step 2: calculate temperatur at Position
 					// Formel Jan Leppert Excel Sheet
-					tempAtPosition = temperature + dTemp * (Math.exp(-(position*aGradient)/temperature) - (position/length) * Math.exp(-aGradient)); 
+					tempAtPosition = (temperature) + dTemp * (Math.exp(-(position*aGradient)/temperature) - (position/length) * Math.exp(-aGradient)); 
 					
 					
 					// step 3: correlating eta
 					EtaAtPosition = calcEta(tempAtPosition);
 					
 					//step 4: calculate kappe at Point
-					kappaAtPosition = (EtaAtPosition * length/1000 * (tempAtPosition + 273.15) / Math.pow((innerDiameter - df / 1000) / 1000, 4));
+					kappaAtPosition = (EtaAtPosition * length/1000 * (tempAtPosition + 273.15) / Math.pow((innerDiameter - 2* df / 1000) / 1000, 4));
 					
 					//step 5: Summ Kappa
 					kappa = kappa + kappaAtPosition;
+					
+					} else {}
 					System.out.println(i  +"; "+ position +"; "+ tempAtPosition +"; "+ kappa);
 				}
 			
